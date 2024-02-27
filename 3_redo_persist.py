@@ -1,5 +1,4 @@
 import operator
-import warnings
 from collections import deque
 import logging
 
@@ -177,7 +176,7 @@ class SAMCanvas(pg.PlotWidget):
         self.plotItem.getViewBox().autoRange()
 
     @register(
-        path=opts("file", nameFilter="Images (*.png *.jpg *.jpeg *.bmp " "*.tiff)"),
+        path=opts("file", nameFilter="Images (*.png *.jpg *.jpeg *.bmp *.tiff)"),
         runOptions=[RunOptions.ON_CHANGED, RunOptions.ON_ACTION],
     )
     def load_local_image(self, path="flamingos.jpg"):

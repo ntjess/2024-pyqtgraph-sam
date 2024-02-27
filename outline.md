@@ -1,4 +1,5 @@
-# SciPy 2024 Tutorial Submission: Image Labeling Tool from Scratch using PyQtGraph an FastSAM
+# SciPy 2024 Tutorial Submission: Annotationem ex Nihilo
+**Image Labeling Tool from Scratch using PyQtGraph and FastSAM**
 
 Contributors:
 
@@ -7,10 +8,9 @@ Contributors:
 ## Short Description
 
 Image annotation is an essential part of computer vision and machine learning workflows,
-but is an incredibly time-consuming & manual task. Several tools provide automated
+but is an incredibly soul-sucking manual task. Several tools provide automated
 assistance, but they are often complex, difficult to customize, or hidden behind a
-paywall. This tutorial empowers attendees to build their own image labeling tool from
-scratch using PyQtGraph for visuals and FastSAM for automated labeling. Along the way,
+paywall. This tutorial empowers attendees with knowledge of an annotation tool's fundamental components, using PyQtGraph for visuals and FastSAM for automated labeling. Along the way,
 they will learn the basics of real-time data visualization, Qt Python GUI development, and
 image annotation -- skills that broadly apply beyond the walls of this tutorial.
 
@@ -86,7 +86,8 @@ Minimal prerequisite experience is required to attend this tutorial, as it is ge
 - [10 minute break]
 
 - Segment the current image using `FastSAM` & add configurations [50 minutes]
-
+    - Understand the basics of `FastSAM`, how to use it, and how to massage its outputs
+    - Hook up model inputs and outputs to the GUI, along with a few customizations such as a colormap LUT and random image selection
 <div style="text-align:center">
 <img src="./slides/media/fast-sam.jpg" width="50%"/>
 </div>
@@ -94,6 +95,9 @@ Minimal prerequisite experience is required to attend this tutorial, as it is ge
 - [10 minute break]
 
 - Enable user-selectable region building [50 minutes]
+  - Configure relevant signals, slots, and event hooks to enable user interaction
+  - Create a graphics item which conglomerates user inputs
+  - Ensure updates are high-performance enough not to lag the GUI
 
 <div style="text-align:center">
 <video controls src="./slides/media/region-builder.mp4" width="50%"/>
@@ -107,8 +111,10 @@ Minimal prerequisite experience is required to attend this tutorial, as it is ge
   - Load prediction mask and edits from disk
 
 - Enable manual edits using a brush [20 minutes]
+  - Unobtrusive switching between add/remove
+  - Brush size and shape configuration
 
-- Future work: incorporate image processing algorithms, metadata like labels, QA, etc. [10 minutes]
+- Future work: incorporate image processing algorithms, metadata, QA, etc. [10 minutes]
 
 <div style="text-align:center">
 <img src="./slides/media/s3a-window.jpg" width="50%"/>
@@ -116,22 +122,31 @@ Minimal prerequisite experience is required to attend this tutorial, as it is ge
 
 
 - Conclusion [10 minutes]
+  - Summary of topics: Graphics, user interaction, automation
+  - When the right move is to use commercial tools
 
 ### Comments
 
-This tutorial is based on the author's experience giving similar tutorials in the past. The materials will (likely) be modified and updated versions based on the following repositories:
+The author has multiple publications and oral presentations discussing how annotation quality impacts machine learning models used for printed circuit board analysis. This tutorial is a condensed version of the concepts used to build [S3A](https://gitlab.com/s3a/s3a), an open source labeling tool which the author created and maintains.
 
-- [https://github.com/dask/dask-tutorial/tree/scipy-2017](https://github.com/dask/dask-tutorial/tree/scipy-2017)
-- [https://github.com/jcrist/dask-tutorial-pydata-seattle-2017](https://github.com/jcrist/dask-tutorial-pydata-seattle-2017)
+While it would be ideal to provide the tutorial in the form of Jupyter notebooks, they don't lend themselves well to Qt and real-time interactivity. So, several separately numbered python scripts are provided instead. The code will be available on GitHub beforehand, but the goal is for participants to follow along live and start from scratch.
 
-The tutorial is presented as a set of notebooks, with materials and multiple exercises provided in each notebook. The latter part of the tutorial will make use of a distributed environment provided via an easy web interface (just a single blue button that drops them into a jupyter notebook) that the students can connect to experiment with using dask on a cluster. This allows experiencing real world workloads without requiring the students do any extensive setup beforehand. The earlier part of the tutorial will be done on the student's laptop to ensure the students have dask/distributed setup properly locally for any further experimenting/learning after the tutorial.
+Additional progress on the material will be uploaded to https://github.com/ntjess/2024-pyqtgraph-sam
 
 ## Setup Instructions
+1. Install python dependencies
+```bash
+pip install      \
+    numpy        \
+    pyqtgraph    \
+    PySide6      \
+    qtpy         \
+    scikit-image \
+    torch        \
+    ultralytics
+```
 
-If using conda:
-
-    $ conda install -c conda-forge dask distributed numpy pandas jupyter
-
-If using pip
-
-    $ pip install dask distributed numpy pandas jupyter
+2. Download FastSAM model weights
+```bash
+wget https://github.com/ultralytics/assets/releases/download/v8.1.0/FastSAM-x.pth
+```
