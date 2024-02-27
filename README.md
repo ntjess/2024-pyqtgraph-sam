@@ -59,7 +59,7 @@ The table below provides a rough outline of the material and skill level which w
     <td>Intermediate</td>
     <td>✅</td>
     <td>✅</td>
-    <td>-</td>
+    <td>🟨</td>
   </tr>
   <tr>
     <td>Expert</td>

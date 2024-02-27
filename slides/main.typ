@@ -129,7 +129,7 @@
 
 #let todo(title) = full-image-slide(title)[
   #set align(horizon)
-  #text(3em)[In progress...]
+  #text(3em)[]
 ]
 
 #todo[Persisting User Edits]
