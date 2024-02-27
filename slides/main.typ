@@ -11,7 +11,7 @@
 )
 
 #let media(path, ..args) = image("media/" + path, ..args)
-#let shadow-media(path, ..args) = shadow-image(media(path), ..args)
+#let shadow-media(path, ..args, image-args: (:)) = shadow-image(media(path, ..image-args), ..args)
 #let vid(uri: none, title: none, ..args) = {
   linked-video(shadow-media(..args), uri: uri, title: title)
 }
@@ -97,9 +97,10 @@
 
   + Create a window that loads an image from a file
   + Segment the current image using `FastSAM`
-  + Enable object-by-object adjustments using `FastSAMPrompt`
+  + Enable object-by-object adjustments
+  + Save annotations and edit history
   + Enable manual adjustments using a brush
-  + Incorporate metadata like labels, confidence, tags, ...
+  + Future work: incorporate metadata & postprocessing
 ]
 
 #let full-image-slide(title, body) = slide({
@@ -118,10 +119,69 @@
 
 #full-image-slide[Predictions using Ultralytics `FastSAM`][fast-sam.jpg]
 
-#full-image-slide[Providing user edits][
+#full-image-slide[Enabling User-Specified Regions][
   #vid(
     uri: "media/region-builder.mp4",
     "region-builder-thumbnail.jpg",
     height: 4.1in,
   )
 ]
+
+#let todo(title) = full-image-slide(title)[
+  #set align(horizon)
+  #text(3em)[In progress...]
+]
+
+#todo[Persisting User Edits]
+#todo[Enabling Brush Adjustments]
+
+#slide[
+  = Future Work
+  Regions are only part of the story. We also need: 
+
+  #let swap-ims(..paths) = swap(
+    ..paths.pos().map(
+      shadow-media.with(height: 3.3in, image-args: (fit: "contain"))
+    )
+  )
+
+  #let bodies = (
+    (
+      heading: pos[Metadata],
+      body: [
+        (class, tags, comments, ...)
+      ]
+    ),
+    (
+      heading: pos[Postprocessing],
+      body: [(Filtering, grouping, ...)]
+    ),
+    (
+      heading: pos[Annotation management],
+      body: [(copy/delete, bulk edits, ...)]
+    )
+  )
+  #col-grid(columns: (1fr, 0.5fr),
+    emph-one-by-one(overview: false, ..bodies),
+    swap-ims("sample-annotation.jpg", "postprocessing.jpg", "annotation-management.jpg"),
+  )
+]
+
+#slide[
+  = Future Work
+  These are available within #link("https://github.com/TerraVerum/s3a")[S3A]: an open-source labeling tool
+
+  #col-grid[
+    #show raw.where(lang: "py"): formatter.format-raw.with(line-numbers: true, fill: none)
+    Integrate `FastSAM` (or any algorithm you wish) in #pos[3\* lines of code!]
+    ```python
+    def wrap_fast_sam(image: np.ndarray):
+      label_mask = fast_sam(image)
+      return dict(labels=label_mask)
+    ```
+  ][
+    #shadow-media("s3a-window.jpg", height: 3in)
+  ]
+]
+
+#todo[Conclusion]

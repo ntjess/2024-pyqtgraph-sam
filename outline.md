@@ -1,5 +1,5 @@
 # SciPy 2024 Tutorial Submission: Annotationem ex Nihilo
-**Image Labeling Tool from Scratch using PyQtGraph and FastSAM**
+**Create an Image Labeling Tool from Scratch using PyQtGraph and FastSAM**
 
 Contributors:
 
@@ -25,7 +25,12 @@ Image annotation is the bedrock of computer vision machine learning tasks. Unfor
 - **General data science practices**: Data visualization, python ecosystem integration, and general programming practices
 
 ### Who Should Attend?
-Minimal prerequisite experience is required to attend this tutorial, as it is geared primarily toward novice-to-intermediate Python data scientists. The table below provides a rough outline of who would benefit most from the material based on their skill level in each given topic:
+Minimal prerequisite experience is required to attend this tutorial, as it is geared primarily toward novice-to-intermediate Python data scientists. That said, it assumes attendees have strong familiarity with the Python language itself, specifically around:
+- Object-oriented programming
+- Decorators
+- Documentation browsing
+
+The table below provides a rough outline of the material and skill level which will be taught in each given topic:
 
 <table>
 <thead>
@@ -44,7 +49,7 @@ Minimal prerequisite experience is required to attend this tutorial, as it is ge
     <td>Qt for Python</td>
   </tr>
   <tr>
-    <td rowspan="3"><b>Tutorial Depth</b></td>
+    <td rowspan="3" style="writing-mode:vertical-rl; transform: rotate(180deg)"><b>Tutorial Depth</b></td>
     <td>Novice</td>
     <td>✅</td>
     <td>✅</td>
@@ -103,7 +108,7 @@ Minimal prerequisite experience is required to attend this tutorial, as it is ge
 <video controls src="./slides/media/region-builder.mp4" width="50%"/>
 </div>
 
-- [10 minute break]
+- [20 minute break -- I anticipate this is where inexperienced users will need to catch up, so a larger pause is provisioned]
 
 - Persist user edits [50 minutes]
   - Undo / redo region edits
@@ -127,11 +132,11 @@ Minimal prerequisite experience is required to attend this tutorial, as it is ge
 
 ### Comments
 
-The author has multiple publications and oral presentations discussing how annotation quality impacts machine learning models used for printed circuit board analysis. This tutorial is a condensed version of the concepts used to build [S3A](https://gitlab.com/s3a/s3a), an open source labeling tool which the author created and maintains.
+The author has multiple publications and oral presentations discussing how annotation quality impacts machine learning models used for printed circuit board analysis. This tutorial is a condensed version of the concepts used to build [S3A](https://gitlab.com/TerraVerum/s3a), an open source labeling tool which the author created and maintains.
 
 While it would be ideal to provide the tutorial in the form of Jupyter notebooks, they don't lend themselves well to Qt and real-time interactivity. So, several separately numbered python scripts are provided instead. The code will be available on GitHub beforehand, but the goal is for participants to follow along live and start from scratch.
 
-Additional progress on the material will be uploaded to https://github.com/ntjess/2024-pyqtgraph-sam
+Additional progress on the tutorial material will be uploaded to https://github.com/ntjess/2024-pyqtgraph-sam
 
 ## Setup Instructions
 1. Install python dependencies
