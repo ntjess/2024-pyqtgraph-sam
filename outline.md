@@ -16,69 +16,106 @@ image annotation -- skills that broadly apply beyond the walls of this tutorial.
 
 ## Long Description
 
-### Overview
+### Topic Overview
 
-Image annotation is the bedrock of computer vision machine learning tasks. Unfortunately,
-it is also time-consuming, soul-sucking,
+Image annotation is the bedrock of computer vision machine learning tasks. Unfortunately, it is also time-consuming and soul-sucking. However, a small amount of automation can go a long way in reducing the time and effort required to label images. This tutorial "teaches a man to fish" with groundwork in each major area of the image labeling process: displaying data, handling user input, adding automation, and saving the results. Toward this end, the following objectives are covered
+- **Computer Vision**: Basic image handling (loading, resizing, pytorch/numpy manipulation), morphological operations (erosion/dilation, contour detection), CV models (Ultraltyics FastSAM usage)
+- **Interactive plotting**: Basic PyQtGraph window setup, forms of data representation (image, scatterplot, axis scaling), hooking into user input
+- **Qt for Python**: Qt events, signals and slots
+- **General data science practices**: Data visualization, python ecosystem integration, and general programming practices
 
-<!-- Example from different tutorial-->
-Dask is a flexible tool for parallelizing Python code on a single machine or across a cluster.
+### Who Should Attend?
+Minimal prerequisite experience is required to attend this tutorial, as it is geared primarily toward novice-to-intermediate Python data scientists. The table below provides a rough outline of who would benefit most from the material based on their skill level in each given topic:
 
-We can think of dask at a high and a low level:
+<table>
+<thead>
+  <tr>
+    <th></th>
+    <th></th>
+    <th style="text-align: center" colspan="3"><b>Topics Covered</b></th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td></td>
+    <td></td>
+    <td>Computer vision</td>
+    <td>Interactive plotting</td>
+    <td>Qt for Python</td>
+  </tr>
+  <tr>
+    <td rowspan="3"><b>Tutorial Depth</b></td>
+    <td>Novice</td>
+    <td>✅</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td>Intermediate</td>
+    <td>✅</td>
+    <td>✅</td>
+    <td>-</td>
+  </tr>
+  <tr>
+    <td>Expert</td>
+    <td>-</td>
+    <td>-</td>
+    <td>-</td>
+  </tr>
+</tbody>
+</table>
 
-- High level collections: Dask provides high-level Array, Bag, and DataFrame collections that mimic and build upon NumPy arrays, Python lists, and Pandas DataFrames, but operate in parallel on large datasets that may not fit into memory.
-
-- Low Level schedulers: Dask provides dynamic task schedulers that execute task graphs in parallel. These schedulers power the high-level collections mentioned above but can also power custom, user-defined workloads to expose potential parallelism in procedural code.
-
-Different users operate at different levels but it is useful to understand both. This tutorial will cover both the high-level use of `dask.array` and `dask.dataframe` and the low-level use of dask graphs and schedulers. Attendees will come away:
-
-- Able to use `dask.delayed` to parallelize existing code
-- Understanding the differences between the dask schedulers, and when to use one over another
-- Able to use the `distributed` futures interface to distribute work over a cluster
-- With a firm understanding of the different dask collections (`dask.array` and `dask.dataframe`) and how and when to use them
 
 ### Outline
 
 - Overview [10 minutes]
-
-    - Give a brief overview of what dask is
+    - Give a brief overview of annotation as a concept and its usefulness
     - Get everyone setup with tutorial materials
+<div style="text-align:center">
+<img src="./slides/media/types-of-annotation.jpg" width="50%"/>
+</div>
 
-- Parallelizing general code using Dask Delayed [40 minutes]
+- Creating a basic image viewer [40 minutes]
+    - Introduction to PyQtGraph, Qt, and GUI anatomy
+    - Gathering independent examples of `ImageItem`, `PlotWidget`, and `ParameterTree` into a coherent application
 
-    - Introduce the `dask.delayed` interface. Participants will learn how to use dask to parallelize existing code by decorating functions.
-    - Motivating example: Parallelizing an ETL workflow
-
-- [10 minute break]
-
-- Scheduling and futures [50 minutes]
-
-    - Discuss the different schedulers. Briefly enumerate why you might use one over another.
-    - Dive into using the distributed scheduler futures interface.
-    - Motivating example: Repeat of the ETL workflow above, this time using the distributed futures interface
+<div style="text-align:center">
+<img src="./slides/media/window-loading-image.jpg" width="50%"/>
+</div>
 
 - [10 minute break]
 
-- Parallel arrays using Dask Array [50 minutes]
+- Segment the current image using `FastSAM` & add configurations [50 minutes]
 
-    - Introduce dask collections by starting with dask array. Discuss how dask collections mirror their single-threaded counterparts (e.g. dask array mirrors numpy). Many examples of converting numpy code to dask
-    - Motivating example: Ocean temperature data
+<div style="text-align:center">
+<img src="./slides/media/fast-sam.jpg" width="50%"/>
+</div>
 
 - [10 minute break]
 
-- Parallel DataFrames using Dask DataFrame [50 minutes]
+- Enable user-selectable region building [50 minutes]
 
-    - Introduction to dask dataframe. Participants will work through several examples demonstrating common tasks and pitfalls, with brief discussions of performance tips.
-    - Motivating example: NYC taxi data
+<div style="text-align:center">
+<video controls src="./slides/media/region-builder.mp4" width="50%"/>
+</div>
 
-- If Extra Time…
+- [10 minute break]
 
-    - Discuss debugging and profiling strategies
-    - Discuss advanced features of the distributed scheduler
+- Persist user edits [50 minutes]
+  - Undo / redo region edits
+  - Save prediction mask and edits to disk
+  - Load prediction mask and edits from disk
+
+- Enable manual edits using a brush [20 minutes]
+
+- Future work: incorporate image processing algorithms, metadata like labels, QA, etc. [10 minutes]
+
+<div style="text-align:center">
+<img src="./slides/media/s3a-window.jpg" width="50%"/>
+</div>
+
 
 - Conclusion [10 minutes]
-    - Recap on what we learned
-    - Provide references for where to go from here.
 
 ### Comments
 

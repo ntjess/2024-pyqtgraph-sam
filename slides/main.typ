@@ -39,7 +39,16 @@
   ]
 ]
 
-#set page(height: auto)
+// #let _old-slide = slide
+// #let slide(..args) = {
+//   set page(background: image("media/background.svg"))
+//   _old-slide(..args)
+// }
+#let multi-slide(title, ..body) = slide[
+  #heading(title)
+  #swap(..body)
+]
+
 #multi-slide[Introduction][
   Several types of annotation, most time consuming and informative is #pos[instance segmentation]
   #set align(center + bottom)
@@ -54,7 +63,7 @@
     height: 3in,
   )
 ][
-  Assistance tools help, but are often #neg[paywalled] or #neg[perform poorly]
+  Assistance tools help, but are often #neg[paywalled], #neg[perform poorly], or expect #neg[detailed project workflows]
 
   #set align(center + bottom)
   #locate(loc => {
@@ -91,4 +100,28 @@
   + Enable object-by-object adjustments using `FastSAMPrompt`
   + Enable manual adjustments using a brush
   + Incorporate metadata like labels, confidence, tags, ...
+]
+
+#let full-image-slide(title, body) = slide({
+  heading(title)
+  if body.has("text") {
+    body = body.text
+  }
+  set align(center + bottom)
+  if type(body) == str {
+    body = shadow-media(body, height: 4.1in, radius: 5pt)
+  }
+  body
+})
+
+#full-image-slide[Window Loading an Image][window-loading-image.jpg]
+
+#full-image-slide[Predictions using Ultralytics `FastSAM`][fast-sam.jpg]
+
+#full-image-slide[Providing user edits][
+  #vid(
+    uri: "media/region-builder.mp4",
+    "region-builder-thumbnail.jpg",
+    height: 4.1in,
+  )
 ]

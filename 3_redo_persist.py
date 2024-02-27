@@ -1,5 +1,7 @@
-import inspect
 import operator
+import warnings
+from collections import deque
+import logging
 
 import numpy as np
 import pyqtgraph as pg
@@ -48,6 +50,9 @@ class SelectedRegion(QtWidgets.QGraphicsItem):
         self.pen = pg.mkPen("w")
         self.brush = pg.mkBrush("r")
         self.mask = np.zeros((0, 0), dtype=bool)
+        self._history = deque([self.mask], maxlen=100)
+        self._history_pointer = 0
+
         self.path = None
         self._bounding_rect = QtCore.QRectF()
 
@@ -58,9 +63,12 @@ class SelectedRegion(QtWidgets.QGraphicsItem):
         p.setBrush(self.brush)
         p.drawPath(self.path)
 
-    def update_mask(self, mask, operation):
+    def update_mask(self, mask, operation=None, remember=True):
         self.prepareGeometryChange()
-        self.mask = operation(self.mask, mask)
+        if operation:
+            self.mask = operation(self.mask, mask)
+        else:
+            self.mask = mask
         xy_coords = self.get_contours_as_xy_coords()
         self.path = arrayToQPath(*xy_coords.T, connect="finite")
         finite = xy_coords[np.isfinite(xy_coords).all(axis=1)]
@@ -69,9 +77,39 @@ class SelectedRegion(QtWidgets.QGraphicsItem):
         else:
             self._bounding_rect = QtCore.QRectF()
         self.update()
+        if remember:
+            while self._history_pointer < len(self._history) - 1:
+                self._history.pop()
+            self._history.append(self.mask.copy())
+            self._history_pointer = len(self._history) - 1
+
+    def clear_history(self):
+        self._history.clear()
+        self._history.append(self.mask.copy())
+        self._history_pointer = 0
+
+    def undo(self):
+        if self._history_pointer > 0:
+            self._history_pointer -= 1
+            self.update_mask(self._history[self._history_pointer], remember=False)
+        else:
+            logging.warn("Nothing to undo")
+
+    def redo(self):
+        if self._history_pointer < len(self._history) - 1:
+            self._history_pointer += 1
+            self.update_mask(self._history[self._history_pointer], remember=False)
+        else:
+            logging.warn("Nothing to redo")
+
+    def fill_holes(self):
+        self.update_mask(binary_fill_holes(self.mask))
+
+    def clear_mask(self):
+        self.update_mask(np.zeros_like(self.mask))
 
     def reset_mask(self, mask):
-        self.update_mask(mask, lambda a, b: b)
+        self.update_mask(mask)
 
     def add_mask(self, mask):
         self.update_mask(mask, operator.or_)
@@ -116,6 +154,9 @@ class SAMCanvas(pg.PlotWidget):
             if hasattr(func, "__opts__"):
                 interact(getattr(self, name), **func.__opts__, parent=params)
 
+        obj = self.selected_region
+        for func in [obj.clear_mask, obj.fill_holes, obj.undo, obj.redo]:
+            interact(func, parent=selection_parent)  # type: ignore
         self.set_styles()
         self.mask_item.sigClicked.connect(self.on_image_click)
 
@@ -161,6 +202,7 @@ class SAMCanvas(pg.PlotWidget):
         label_mask = resize(foreground, image.shape[:2], order=0, anti_aliasing=False)
         self.mask_item.setImage(label_mask)
         self.selected_region.reset_mask(np.zeros_like(label_mask))
+        self.selected_region.clear_history()
 
     @register(
         colormap=opts("list", values=sorted(pg.colormap.listMaps())),
@@ -170,14 +212,6 @@ class SAMCanvas(pg.PlotWidget):
     def set_styles(self, colormap="viridis", opacity=0.5):
         colormap = pg.colormap.get(colormap)
         self.mask_item.setOpts(colorMap=colormap, opacity=opacity)
-
-    @register()
-    def fill_holes(self):
-        self.selected_region.reset_mask(binary_fill_holes(self.selected_region.mask))
-
-    @register()
-    def reset_selection(self):
-        self.selected_region.reset_mask(np.zeros_like(self.mask_item.image))
 
 
 def make_window(children: list[QtWidgets.QWidget] = None):

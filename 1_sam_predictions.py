@@ -30,13 +30,12 @@ def run_predictor():
     if image is None:
         return
     results: Results = model.predict(image, verbose=False)
-    if len(results) == 0 or results[0].masks is None:
+    assert len(results) == 1, "FastSAM only supports single-image predictions"
+    if results[0].masks is None:
         canvas.mask_item.setImage(None)
         return
-    combined = results[0].masks.data
-    for component in results[1:]:
-        combined += component.masks.data
-    foreground = combined[0].detach().cpu().numpy()
+    combined = results[0].masks.data.argmax(axis=0)
+    foreground = combined.detach().cpu().numpy().astype(int)
     canvas.mask_item.setImage(foreground, rect=canvas.image_item.boundingRect())
     canvas.mask_item.show()
 
